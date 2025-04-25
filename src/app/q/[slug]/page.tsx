@@ -40,7 +40,7 @@ export default async function QRPage({ params }: QRPageProps) {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="bg-white p-8 rounded-2xl shadow-lg">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            {qrPage.user.name || 'Anonymous'}'s QR Code
+            {qrPage.user.name || 'Anonymous'}&apos;s QR Code
           </h1>
           <div className="mb-6">
             <div className="w-48 h-48 mx-auto bg-gray-100 rounded-lg flex items-center justify-center">

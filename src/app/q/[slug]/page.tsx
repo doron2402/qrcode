@@ -1,13 +1,14 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
 
-interface QRPageProps {
+type Props = {
   params: {
     slug: string;
   };
-}
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
-export async function generateMetadata({ params }: QRPageProps) {
+export async function generateMetadata({ params }: Props) {
   const qrPage = await prisma.qRPage.findUnique({
     where: { slug: params.slug },
     include: { user: true },
@@ -25,7 +26,7 @@ export async function generateMetadata({ params }: QRPageProps) {
   };
 }
 
-export default async function QRPage({ params }: QRPageProps) {
+export default async function QRPage({ params }: Props) {
   const qrPage = await prisma.qRPage.findUnique({
     where: { slug: params.slug },
     include: { user: true },

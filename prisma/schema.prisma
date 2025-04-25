@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  firstName      String?
+  lastName      String?
+  phone     String  @unique @db.VarChar(24)
+  email     String   @unique
+  qrPage    QRPage?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model QRPage {
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  slug       String   @unique
+  content    String   @db.VarChar(255)
+  font       String
+  fontColor  String
+  background String
+  type       String   // tattoo, sticker, both
+  size       String   // small, medium, large
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id])
+}

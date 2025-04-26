@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import TestimonialsCarousel from "@/components/TestimonialsCarousel";
+import StepsSection from "@/components/StepsSection";
 
 export default function Home() {
   return (
@@ -48,6 +49,9 @@ export default function Home() {
           </Link>
         </div>
       </div>
+
+      {/* Steps Section */}
+      <StepsSection />
 
       {/* Features Section */}
       <div className="py-24 bg-white">

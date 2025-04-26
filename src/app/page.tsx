@@ -23,17 +23,16 @@ export default function Home() {
         {/* Content */}
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-white mb-6 drop-shadow-lg">
-            Your Story,
-            <span className="text-blue-200"> Scannable</span>
+            We Ship Your Own QR Code as a Sticker or Tattoo
           </h1>
           <p className="text-xl sm:text-2xl text-gray-100 mb-8 max-w-3xl mx-auto drop-shadow-md">
-            Turn your digital presence into a physical experience. Create custom QR code stickers or even get them as tattoos. Let people scan your story, anywhere, anytime.
+            Get your custom QR code in just a few days! Link it to anything you love, your website, social media, or even a special page we&apos;ll create just for you. And the best part? You can update it whenever you want! ✨
           </p>
           <Link
             href="/create"
             className="inline-flex items-center px-8 py-4 text-lg font-medium text-white bg-blue-600/90 rounded-full hover:bg-blue-700 transition-colors duration-200 shadow-lg hover:shadow-xl backdrop-blur-sm"
           >
-            Get Started
+            Starting at $4.99
             <svg
               className="ml-2 -mr-1 w-5 h-5"
               fill="currentColor"

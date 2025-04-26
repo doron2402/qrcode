@@ -1,11 +1,20 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
+import type { User } from '.prisma/client';
 
-interface PageProps {
+type PageProps = {
   params: {
     slug: string;
   };
-}
+  searchParams?: { [key: string]: string | string[] | undefined };
+};
+
+const getUserName = ({ user }: { user: User }, defaultName: string) => {
+  if (user) {
+    return `${user?.firstName} ${user?.lastName}`;
+  }
+  return defaultName;
+};
 
 export async function generateMetadata({ params }: PageProps) {
   const qrPage = await prisma.qRPage.findUnique({
@@ -20,7 +29,7 @@ export async function generateMetadata({ params }: PageProps) {
   }
 
   return {
-    title: `${qrPage.user.name || 'User'}'s QR Code`,
+    title: `${getUserName(qrPage, 'User')}'s QR Code`,
     description: qrPage.content,
   };
 }
@@ -40,7 +49,7 @@ export default async function QRPage({ params }: PageProps) {
       <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="bg-white p-8 rounded-2xl shadow-lg">
           <h1 className="text-3xl font-bold text-gray-900 mb-4">
-            {qrPage.user.name || 'Anonymous'}&apos;s QR Code
+            {getUserName(qrPage, 'Anonymous')}
           </h1>
           <div className="mb-6">
             <div className="w-48 h-48 mx-auto bg-gray-100 rounded-lg flex items-center justify-center">

@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { QRCodeFormData, PRICES } from '@/types';
 
 interface PurchaseOptionsProps {
@@ -15,15 +14,6 @@ export default function PurchaseOptions({ formData, onUpdate }: PurchaseOptionsP
     });
   };
 
-  const handleQuantityChange = (type: 'sticker' | 'tattoo', delta: number) => {
-    const field = `${type}Quantity`;
-    const newValue = Math.max(0, formData[field] + delta);
-    onUpdate({
-      ...formData,
-      [field]: newValue
-    });
-  };
-
   const calculatePrice = () => {
     const stickerTotal = PRICES.sticker[formData.stickerSize] * formData.stickerQuantity;
     const tattooTotal = PRICES.tattoo[formData.tattooSize] * formData.tattooQuantity;
@@ -31,7 +21,7 @@ export default function PurchaseOptions({ formData, onUpdate }: PurchaseOptionsP
   };
 
   const inputClassName = "mt-1 block w-full rounded-md border border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black";
-  const numberInputClassName = "w-16 text-center rounded-md border border-black shadow-sm focus:border-blue-500 focus:ring-blue-500";
+  const numberInputClassName = "w-24 text-center rounded-md border border-black shadow-sm focus:border-blue-500 focus:ring-blue-500";
 
   return (
     <div className="space-y-6">
@@ -59,31 +49,15 @@ export default function PurchaseOptions({ formData, onUpdate }: PurchaseOptionsP
             <label htmlFor="stickerQuantity" className="block text-sm font-medium text-gray-700">
               Quantity
             </label>
-            <div className="flex items-center space-x-2">
-              <button
-                type="button"
-                onClick={() => handleQuantityChange('sticker', -1)}
-                className="p-1 rounded-md border border-black hover:bg-gray-50"
-              >
-                -
-              </button>
-              <input
-                type="number"
-                id="stickerQuantity"
-                name="stickerQuantity"
-                min="0"
-                value={formData.stickerQuantity}
-                onChange={handleInputChange}
-                className={numberInputClassName}
-              />
-              <button
-                type="button"
-                onClick={() => handleQuantityChange('sticker', 1)}
-                className="p-1 rounded-md border border-black hover:bg-gray-50"
-              >
-                +
-              </button>
-            </div>
+            <input
+              type="number"
+              id="stickerQuantity"
+              name="stickerQuantity"
+              min="0"
+              value={formData.stickerQuantity}
+              onChange={handleInputChange}
+              className={numberInputClassName}
+            />
             {formData.stickerQuantity > 0 && (
               <p className="mt-2 text-sm text-gray-600">
                 Sticker Total: ${(formData.stickerQuantity * PRICES.sticker[formData.stickerSize]).toFixed(2)}
@@ -117,31 +91,15 @@ export default function PurchaseOptions({ formData, onUpdate }: PurchaseOptionsP
             <label htmlFor="tattooQuantity" className="block text-sm font-medium text-gray-700">
               Quantity
             </label>
-            <div className="flex items-center space-x-2">
-              <button
-                type="button"
-                onClick={() => handleQuantityChange('tattoo', -1)}
-                className="p-1 rounded-md border border-black hover:bg-gray-50"
-              >
-                -
-              </button>
-              <input
-                type="number"
-                id="tattooQuantity"
-                name="tattooQuantity"
-                min="0"
-                value={formData.tattooQuantity}
-                onChange={handleInputChange}
-                className={numberInputClassName}
-              />
-              <button
-                type="button"
-                onClick={() => handleQuantityChange('tattoo', 1)}
-                className="p-1 rounded-md border border-black hover:bg-gray-50"
-              >
-                +
-              </button>
-            </div>
+            <input
+              type="number"
+              id="tattooQuantity"
+              name="tattooQuantity"
+              min="0"
+              value={formData.tattooQuantity}
+              onChange={handleInputChange}
+              className={numberInputClassName}
+            />
             {formData.tattooQuantity > 0 && (
               <p className="mt-2 text-sm text-gray-600">
                 Tattoo Total: ${(formData.tattooQuantity * PRICES.tattoo[formData.tattooSize]).toFixed(2)}

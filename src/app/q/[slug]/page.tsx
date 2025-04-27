@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation';
 import { prisma } from '@/lib/prisma';
-import type { User } from '.prisma/client';
+import type { User, QRPage } from '@/types/prisma';
 
 type PageProps = {
   params: {

@@ -6,6 +6,7 @@ import { QRCodeFormData, CustomerInfo, PurchaseFormData, PRICES } from '@/types'
 interface PurchaseModalProps {
   isOpen: boolean;
   onClose: () => void;
+  quantity?: number; // Add quantity prop to check if purchase is allowed
   formData: QRCodeFormData;
   total: string;
 }
@@ -34,7 +35,17 @@ export default function PurchaseModal({ isOpen, onClose, formData, total }: Purc
   });
 
   const [sameAsShipping, setSameAsShipping] = useState(true);
-  const [purchaseData, setPurchaseData] = useState<QRCodeFormData>(formData);
+  const [purchaseData, setPurchaseData] = useState<QRCodeFormData>({
+    ...formData,
+    stickerQuantity: formData.stickerQuantity || 0,
+    tattooQuantity: formData.tattooQuantity || 0,
+    stickerSize: formData.stickerSize || 'small',
+    tattooSize: formData.tattooSize || 'small',
+    content: formData.content ?? '',
+    contentType: formData.contentType || 'url',
+    fontColor: formData.fontColor || '#000000',
+    background: formData.background || '#FFFFFF'
+  });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -83,7 +94,7 @@ export default function PurchaseModal({ isOpen, onClose, formData, total }: Purc
     return (stickerTotal + tattooTotal).toFixed(2);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const finalPurchaseData: PurchaseFormData = {
       ...purchaseData,
@@ -92,13 +103,59 @@ export default function PurchaseModal({ isOpen, onClose, formData, total }: Purc
       sameAsShipping
     };
     // TODO: Handle form submission
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          // User data
+          email: finalPurchaseData.customerInfo.email,
+          firstName: finalPurchaseData.customerInfo.firstName,
+          lastName: finalPurchaseData.customerInfo.lastName,
+          phone: finalPurchaseData.customerInfo.phone,
+          address: finalPurchaseData.customerInfo.address,
+          zipCode: finalPurchaseData.customerInfo.zipCode,
+          state: finalPurchaseData.customerInfo.state,
+          country: finalPurchaseData.customerInfo.country,
+
+          // Billing data
+          billingAddress: finalPurchaseData.billingInfo.address,
+          amountInCents: Math.round(parseFloat(calculatePrice()) * 100),
+          stripeID: 'TODO', // Need to integrate Stripe checkout first
+
+          // QR code data
+          qrContent: finalPurchaseData.content,
+          qrType: finalPurchaseData.contentType,
+          qrColor: finalPurchaseData.fontColor,
+          qrBackgroundColor: finalPurchaseData.background,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to process checkout');
+      }
+
+      const result = await response.json();
+      if (!result.success) {
+        throw new Error(result.error || 'Failed to process checkout');
+      }
+      alert('Purchase successful!!!');
+      onClose();
+    } catch (error) {
+      console.error('Error submitting purchase:', error);
+      // TODO: Show error message to user
+    }
     console.log('Form submitted:', finalPurchaseData);
   };
 
   const inputClassName = "mt-1 block w-full rounded-md border border-black shadow-sm focus:border-blue-500 focus:ring-blue-500";
   const numberInputClassName = "w-24 text-center rounded-md border border-black shadow-sm focus:border-blue-500 focus:ring-blue-500";
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div className="fixed inset-0 bg-white z-50 overflow-y-auto">

@@ -1,5 +1,5 @@
 export type Size = 'small' | 'medium' | 'large';
-export type ContentType = 'url' | 'text' | 'phone' | 'sms' | 'whatsapp';
+export type ContentType = 'url' | 'text' | 'phone' | 'sms' | 'whatsapp' | 'hosted' | 'email';
 
 export interface QRCodeFormData {
   contentType: ContentType;

@@ -6,26 +6,27 @@ import QRCodeForm from '@/components/QRCodeForm';
 import QRCodePreview from '@/components/QRCodePreview';
 import PurchaseModal from '@/components/PurchaseModal';
 import { QRCodeFormData } from '@/types';
+import config from '@/config';
 
 export default function CreatePage() {
   const [qrCode, setQrCode] = useState<string>('');
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [formData, setFormData] = useState<QRCodeFormData>({
     contentType: 'url',
-    content: '',
+    content: 'https://example.com',
+    slug: '',
     font: 'Arial',
     fontColor: '#000000',
     background: '#FFFFFF',
     stickerQuantity: 0,
-    stickerSize: 'medium',
+    stickerSize: 'small',
     tattooQuantity: 0,
-    tattooSize: 'medium'
+    tattooSize: 'small'
   });
 
   const handleGenerate = async (data: QRCodeFormData) => {
     try {
       let qrContent = data.content;
-
       // Format content based on type
       switch (data.contentType) {
         case 'phone':
@@ -36,6 +37,12 @@ export default function CreatePage() {
           break;
         case 'whatsapp':
           qrContent = `https://wa.me/${data.content}`;
+          break;
+        case 'url':
+          qrContent = data.content;
+          break;
+        case 'hosted':
+          qrContent = `${config.baseUrl}/q/${data.content}`;
           break;
         // URL and text don't need special formatting
       }
@@ -49,7 +56,11 @@ export default function CreatePage() {
         margin: 1
       });
       setQrCode(qrCodeDataUrl);
-      setFormData(data);
+      setFormData(prevData => ({
+        ...prevData,
+        content: qrContent
+      }));
+
     } catch (err) {
       console.error('Error generating QR code:', err);
     }

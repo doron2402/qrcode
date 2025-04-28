@@ -1,5 +1,7 @@
-import { useState } from 'react';
-import { QRCodeFormData, PRICES } from '@/types';
+import { useState, useEffect } from 'react';
+import { QRCodeFormData } from '@/types';
+import config from '@/config';
+
 
 interface QRCodeFormProps {
   onGenerate: (formData: QRCodeFormData) => void;
@@ -26,6 +28,25 @@ export default function QRCodeForm({ onGenerate }: QRCodeFormProps) {
     }));
   };
 
+  const [uniqueSlug, setUniqueSlug] = useState<string | null>(null);
+
+  const fetchUniqueSlug = async () => {
+    try {
+      const response = await fetch(config.api.slug);
+      const data = await response.json();
+      if (data.slug) {
+        setUniqueSlug(data.slug);
+      }
+    } catch (error) {
+      console.error('Error fetching unique slug:', error);
+    }
+  };
+
+  // Call fetchUniqueSlug when component mounts
+  useEffect(() => {
+    fetchUniqueSlug();
+  }, []);
+
   const inputClassName = "mt-1 block w-full rounded-md border border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black";
   const selectClassName = "mt-1 block w-full rounded-md border border-black shadow-sm focus:border-blue-500 focus:ring-blue-500 text-black";
   const colorInputClassName = "mt-1 block w-full h-10 rounded-md border border-black shadow-sm focus:border-blue-500 focus:ring-blue-500";
@@ -42,13 +63,22 @@ export default function QRCodeForm({ onGenerate }: QRCodeFormProps) {
             name="contentType"
             className={selectClassName}
             value={formData.contentType}
-            onChange={handleInputChange}
+            onChange={(e) => {
+              handleInputChange(e);
+              if (e.target.value === 'hosted') {
+                setFormData(prev => ({...prev, content: `${config.baseUrl}/q/${uniqueSlug}`}));
+              } else {
+                setFormData(prev => ({...prev, content: ''}));
+              }
+            }}
           >
             <option value="url">URL</option>
             <option value="text">Text</option>
             <option value="phone">Phone Number (Call)</option>
             <option value="sms">Phone Number (Text Message)</option>
             <option value="whatsapp">WhatsApp Number</option>
+            <option value="hosted">Hosted Website (QR Page)</option>
+            <option value="email">Email</option>
           </select>
         </div>
 
@@ -58,23 +88,32 @@ export default function QRCodeForm({ onGenerate }: QRCodeFormProps) {
              formData.contentType === 'text' ? 'Text' :
              formData.contentType === 'phone' ? 'Phone Number' :
              formData.contentType === 'sms' ? 'Phone Number' :
+             formData.contentType === 'hosted' ? `Hosted URL by QR Page: ${config.baseUrl}/q/${uniqueSlug}` :
+             formData.contentType === 'email' ? 'Email' :
              'WhatsApp Number'}
           </label>
-          <textarea
-            id="content"
-            name="content"
-            rows={3}
-            className={inputClassName}
-            value={formData.content}
-            onChange={handleInputChange}
-            placeholder={
-              formData.contentType === 'url' ? 'Enter URL (e.g., https://example.com)' :
-              formData.contentType === 'text' ? 'Enter text for your QR code' :
-              formData.contentType === 'phone' ? 'Enter phone number (e.g., +1234567890)' :
-              formData.contentType === 'sms' ? 'Enter phone number (e.g., +1234567890)' :
-              'Enter WhatsApp number (e.g., +1234567890)'
-            }
-          />
+          {formData.contentType === 'hosted' ? (
+            <div className="mt-1 p-3 block w-full rounded-md border border-black shadow-sm bg-gray-100 text-gray-600">
+              {config.baseUrl}/q/{uniqueSlug}
+            </div>
+          ) : (
+            <textarea
+              id="content"
+              name="content"
+              rows={3}
+              className={inputClassName}
+              value={formData.content}
+              onChange={handleInputChange}
+              placeholder={
+                formData.contentType === 'url' ? 'Enter URL (e.g., https://example.com)' :
+                formData.contentType === 'text' ? 'Enter text for your QR code' :
+                formData.contentType === 'phone' ? 'Enter phone number (e.g., +1234567890)' :
+                formData.contentType === 'sms' ? 'Enter phone number (e.g., +1234567890)' :
+                formData.contentType === 'email' ? 'Enter email address (e.g., example@example.com)' :
+                'Enter WhatsApp number (e.g., +1234567890)'
+              }
+            />
+          )}
         </div>
 
         <div>

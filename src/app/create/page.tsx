@@ -14,7 +14,6 @@ export default function CreatePage() {
   const [formData, setFormData] = useState<QRCodeFormData>({
     contentType: 'url',
     content: 'https://example.com',
-    slug: '',
     font: 'Arial',
     fontColor: '#000000',
     background: '#FFFFFF',

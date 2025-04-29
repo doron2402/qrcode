@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "QRVerse - Your Story, Scannable",
-  description: "Create beautiful QR codes for stickers and tattoos",
+  title: "QRVerse - Create Custom QR Codes",
+  description: "Create and customize QR codes for stickers and tattoos",
 };
 
 export default function RootLayout({
@@ -16,7 +17,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={`${inter.className} min-h-screen flex flex-col`}>
+        <Navbar />
+        <main className="flex-1">{children}</main>
+      </body>
     </html>
   );
 }

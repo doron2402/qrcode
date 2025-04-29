@@ -182,6 +182,43 @@ export default function PurchaseModal({ isOpen, onClose, formData, total }: Purc
         {/* Main Content */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <form onSubmit={handleSubmit} className="space-y-8">
+            {/* QR Code Type Section */}
+            <div className="border border-gray-200 rounded-lg p-4">
+              <h3 className="text-lg font-medium text-gray-900 mb-4">QR Code Type</h3>
+              <div className="space-y-4">
+                <div>
+                  <label htmlFor="contentType" className="block text-sm font-medium text-gray-700">
+                    Type
+                  </label>
+                  <select
+                    id="contentType"
+                    className={inputClassName}
+                    value={purchaseData.contentType}
+                    onChange={(e) => setPurchaseData(prev => ({ ...prev, contentType: e.target.value }))}
+                  >
+                    <option value="url">URL</option>
+                    <option value="text">Text</option>
+                    <option value="email">Email</option>
+                    <option value="phone">Phone</option>
+                  </select>
+                </div>
+                <div>
+                  <label htmlFor="content" className="block text-sm font-medium text-gray-700">
+                    Content
+                  </label>
+                  <input
+                    type="text"
+                    id="content"
+                    name="content"
+                    value={purchaseData.content}
+                    onChange={(e) => setPurchaseData(prev => ({ ...prev, content: e.target.value }))}
+                    required
+                    className={inputClassName}
+                  />
+                </div>
+              </div>
+            </div>
+
             {/* Purchase Options */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {/* Stickers Section */}

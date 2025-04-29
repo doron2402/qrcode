@@ -8,7 +8,7 @@ interface QRCodeFormProps {
 
 export default function QRCodeForm({ onGenerate }: QRCodeFormProps) {
   const [formData, setFormData] = useState<QRCodeFormData>({
-    contentType: 'url',
+    contentType: 'link',
     content: '',
     font: 'Arial',
     fontColor: '#000000',
@@ -55,9 +55,9 @@ export default function QRCodeForm({ onGenerate }: QRCodeFormProps) {
             <div className="space-y-2">
               <button
                 className={`w-full text-left px-4 py-3 rounded-lg ${
-                  formData.contentType === 'url' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50'
+                  formData.contentType === 'link' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50'
                 }`}
-                onClick={() => setFormData(prev => ({ ...prev, contentType: 'url' }))}
+                onClick={() => setFormData(prev => ({ ...prev, contentType: 'link' }))}
               >
                 URL
               </button>
@@ -71,9 +71,9 @@ export default function QRCodeForm({ onGenerate }: QRCodeFormProps) {
               </button>
               <button
                 className={`w-full text-left px-4 py-3 rounded-lg ${
-                  formData.contentType === 'phone' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50'
+                  formData.contentType === 'call' ? 'bg-blue-50 text-blue-600' : 'hover:bg-gray-50'
                 }`}
-                onClick={() => setFormData(prev => ({ ...prev, contentType: 'phone' }))}
+                onClick={() => setFormData(prev => ({ ...prev, contentType: 'call' }))}
               >
                 Phone Number
               </button>
@@ -120,19 +120,21 @@ export default function QRCodeForm({ onGenerate }: QRCodeFormProps) {
             <div className="space-y-4">
               <div>
                 <label htmlFor="content" className="block text-sm font-medium text-gray-700 mb-1">
-                  {formData.contentType === 'url' ? 'Enter URL' :
+                  {formData.contentType === 'link' ? 'Enter URL' :
                    formData.contentType === 'text' ? 'Enter Text' :
-                   formData.contentType === 'phone' ? 'Enter Phone Number' :
+                   formData.contentType === 'call' ? 'Enter Phone Number' :
                    formData.contentType === 'sms' ? 'Enter Phone Number' :
                    formData.contentType === 'hosted' ? 'Hosted URL' :
                    formData.contentType === 'email' ? 'Enter Email' :
+                   formData.contentType === 'whatsapp' ? 'Enter WhatsApp Number' :
                    'Enter WhatsApp Number'}
                 </label>
-                {formData.contentType === 'hosted' ? (
+                {formData.contentType === 'hosted' && (
                   <div className="w-full rounded-md border border-gray-300 px-3 py-2 bg-gray-50 text-gray-600">
                     {config.baseUrl}/q/{uniqueSlug}
                   </div>
-                ) : (
+                )}
+                {formData.contentType !== 'hosted' && (
                   <textarea
                     id="content"
                     name="content"
@@ -141,9 +143,9 @@ export default function QRCodeForm({ onGenerate }: QRCodeFormProps) {
                     value={formData.content}
                     onChange={handleInputChange}
                     placeholder={
-                      formData.contentType === 'url' ? 'https://example.com' :
+                      formData.contentType === 'link' ? 'https://example.com' :
                       formData.contentType === 'text' ? 'Enter your text here' :
-                      formData.contentType === 'phone' ? '+1234567890' :
+                      formData.contentType === 'call' ? '+1234567890' :
                       formData.contentType === 'sms' ? '+1234567890' :
                       formData.contentType === 'email' ? 'example@example.com' :
                       '+1234567890'

@@ -12,7 +12,7 @@ export default function CreatePage() {
   const [qrCode, setQrCode] = useState<string>('');
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [formData, setFormData] = useState<QRCodeFormData>({
-    contentType: 'url',
+    contentType: 'link',
     content: 'https://example.com',
     font: 'Arial',
     fontColor: '#000000',

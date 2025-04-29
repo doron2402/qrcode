@@ -1,12 +1,12 @@
 'use client';
 
 import { useState } from 'react';
-import { QRCodeFormData, CustomerInfo, PurchaseFormData, PRICES } from '@/types';
+import { QRCodeFormData, CustomerInfo, PurchaseFormData, PRICES, ContentType } from '@/types';
 
 interface PurchaseModalProps {
   isOpen: boolean;
   onClose: () => void;
-  quantity?: number; // Add quantity prop to check if purchase is allowed
+  quantity?: number;
   formData: QRCodeFormData;
   total: string;
 }
@@ -42,9 +42,10 @@ export default function PurchaseModal({ isOpen, onClose, formData, total }: Purc
     stickerSize: formData.stickerSize || 'small',
     tattooSize: formData.tattooSize || 'small',
     content: formData.content ?? '',
-    contentType: formData.contentType || 'url',
+    contentType: formData.contentType || 'link',
     fontColor: formData.fontColor || '#000000',
-    background: formData.background || '#FFFFFF'
+    background: formData.background || '#FFFFFF',
+    text: formData.text || ''
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -85,6 +86,13 @@ export default function PurchaseModal({ isOpen, onClose, formData, total }: Purc
     setPurchaseData(prev => ({
       ...prev,
       [field]: size
+    }));
+  };
+
+  const handleContentTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setPurchaseData(prev => ({
+      ...prev,
+      contentType: e.target.value as ContentType
     }));
   };
 
@@ -194,12 +202,18 @@ export default function PurchaseModal({ isOpen, onClose, formData, total }: Purc
                     id="contentType"
                     className={inputClassName}
                     value={purchaseData.contentType}
-                    onChange={(e) => setPurchaseData(prev => ({ ...prev, contentType: e.target.value }))}
+                    onChange={handleContentTypeChange}
                   >
-                    <option value="url">URL</option>
+                    <option value="link">Link</option>
                     <option value="text">Text</option>
                     <option value="email">Email</option>
-                    <option value="phone">Phone</option>
+                    <option value="call">Call</option>
+                    <option value="sms">SMS</option>
+                    <option value="v-card">vCard</option>
+                    <option value="whatsapp">WhatsApp</option>
+                    <option value="wifi">WiFi</option>
+                    <option value="app">App</option>
+                    <option value="event">Event</option>
                   </select>
                 </div>
                 <div>

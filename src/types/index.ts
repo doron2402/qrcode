@@ -1,5 +1,5 @@
 export type Size = 'small' | 'medium' | 'large';
-export type ContentType = 'url' | 'text' | 'phone' | 'sms' | 'whatsapp' | 'hosted' | 'email';
+export type ContentType = 'link' | 'text' | 'email' | 'call' | 'sms' | 'v-card' | 'whatsapp' | 'wifi' | 'app' | 'event' | 'hosted';
 
 export interface QRCodeFormData {
   contentType: ContentType;
@@ -11,6 +11,7 @@ export interface QRCodeFormData {
   stickerSize: Size;
   tattooQuantity: number;
   tattooSize: Size;
+  text?: string;
 }
 
 export interface CustomerInfo {

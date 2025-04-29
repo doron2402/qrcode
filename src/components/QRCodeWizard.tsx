@@ -22,7 +22,7 @@ interface AppData {
 
 export default function QRCodeWizard({ onGenerate }: QRCodeWizardProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [qrType, setQrType] = useState<QRCodeType>('url');
+  const [qrType, setQrType] = useState<QRCodeType>('link');
   const [content, setContent] = useState('');
   const [wifiData, setWifiData] = useState<WifiData>({
     ssid: '',
@@ -106,6 +106,7 @@ export default function QRCodeWizard({ onGenerate }: QRCodeWizardProps) {
     onGenerate({
       contentType: qrType,
       content: finalContent,
+      font: 'Arial',
       fontColor: design.color,
       background: '#FFFFFF',
       stickerQuantity: 0,
